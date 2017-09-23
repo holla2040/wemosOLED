@@ -20,10 +20,11 @@ ESP8266HTTPUpdateServer httpUpdater;
 const char *update_path = "/firmware";
 WiFiManager wifiManager;
 
+// wemos OLED is 64x48, also its mapped to x=32,y=0 is the origin
 // SCL GPIO5
 // SDA GPIO4
-#define OLED_RESET 0  // GPIO0
-Adafruit_SSD1306 display(OLED_RESET);
+// no reset control, arggh!
+Adafruit_SSD1306 display(0);
 
 void handleRoot() {
   char temp[400];
@@ -118,10 +119,6 @@ void loop(void) {
 }
 
 void displaySetup()   {
-  pinMode(OLED_RESET,OUTPUT);
-  digitalWrite(OLED_RESET,0);
-  digitalWrite(OLED_RESET,1);
-
   // initialize with the I2C addr 0x3C (for the 64x48)
   display.begin(SSD1306_SWITCHCAPVCC, 0x3C);
   display.clearDisplay();
